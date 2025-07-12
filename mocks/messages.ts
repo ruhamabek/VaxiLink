@@ -1,0 +1,58 @@
+import { Message } from "@/types/child";
+
+export const mockMessages: Message[] = [
+  {
+    id: "m1",
+    senderId: "system",
+    receiverId: "c1",
+    content: "Reminder: Abebe's Penta3 vaccination is due on July 15, 2023. Please visit Bole Health Center.",
+    timestamp: "2023-07-10T09:00:00Z",
+    read: true,
+    type: "reminder",
+  },
+  {
+    id: "m2",
+    senderId: "h1",
+    receiverId: "c1",
+    content: "Hello Abeba, this is Dawit from the health center. I wanted to remind you about Abebe's upcoming vaccination appointment on July 15. Please let me know if you have any questions.",
+    timestamp: "2023-07-12T10:30:00Z",
+    read: false,
+    type: "text",
+  },
+  {
+    id: "m3",
+    senderId: "c1",
+    receiverId: "h1",
+    content: "Thank you for the reminder. What time should I come?",
+    timestamp: "2023-07-12T11:15:00Z",
+    read: true,
+    type: "text",
+  },
+  {
+    id: "m4",
+    senderId: "h1",
+    receiverId: "c1",
+    content: "You can come anytime between 9:00 AM and 3:00 PM. The center is usually less busy in the morning.",
+    timestamp: "2023-07-12T11:30:00Z",
+    read: false,
+    type: "text",
+  },
+  {
+    id: "m5",
+    senderId: "system",
+    receiverId: "c1",
+    content: "Reminder: Sara's Vitamin A supplementation is overdue. It was scheduled for August 10, 2023. Please visit your nearest health center.",
+    timestamp: "2023-08-15T09:00:00Z",
+    read: false,
+    type: "reminder",
+  },
+  {
+    id: "m6",
+    senderId: "system",
+    receiverId: "c1",
+    content: "Notification: New vaccine education material is available. Check the Education section to learn about the importance of completing all vaccine doses.",
+    timestamp: "2023-07-05T14:00:00Z",
+    read: true,
+    type: "notification",
+  },
+];
