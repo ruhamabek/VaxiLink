@@ -55,12 +55,9 @@ export default function LoginScreen() {
       >
         <View style={styles.logoContainer}>
           <Image
-            source={{
-              uri: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
-            }}
+              source={require("../../assets/images/VaxiLink.png")}
             style={styles.logo}
           />
-          <Text style={styles.appName}>HealthConnect Ethiopia</Text>
         </View>
 
         <View style={styles.formContainer}>

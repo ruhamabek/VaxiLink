@@ -6,7 +6,7 @@ import {
   View,
 } from "react-native";
 import { router } from "expo-router";
-import { AlertCircle, BarChart2, Map, Users } from "lucide-react-native";
+import { AlertCircle, BarChart2, Map, Users, LogOut } from "lucide-react-native";
 import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { mockDistricts } from "@/mocks/hew";
@@ -15,52 +15,56 @@ import Card from "@/components/Card";
 import colors from "@/constants/colors";
 
 export default function AdminDashboardScreen() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { t } = useLanguage();
 
-  // Calculate summary statistics
   const totalChildren = mockDistricts.reduce((sum, district) => sum + district.totalChildren, 0);
   const totalZeroDose = mockDistricts.reduce((sum, district) => sum + district.zeroDoseCount, 0);
   const averageCoverage = mockDistricts.reduce((sum, district) => sum + district.coverageRate, 0) / mockDistricts.length;
-  
-  // Find districts with highest and lowest coverage
+
   const sortedByZeroDose = [...mockDistricts].sort((a, b) => b.zeroDoseCount - a.zeroDoseCount);
   const highestZeroDose = sortedByZeroDose.slice(0, 3);
-  
+
   const sortedByCoverage = [...mockDistricts].sort((a, b) => a.coverageRate - b.coverageRate);
   const lowestCoverage = sortedByCoverage.slice(0, 3);
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <Text style={styles.greeting}>
-          Welcome, {user?.name.split(" ")[0]}
-        </Text>
-        <Text style={styles.subGreeting}>
-          Health Administrator Dashboard
-        </Text>
+        <View>
+          <Text style={styles.greeting}>Welcome, {user?.name.split(" ")[0]}</Text>
+          <Text style={styles.subGreeting}>Health Administrator Dashboard</Text>
+        </View>
+        <Button
+          title="Logout"
+          onPress={logout}
+          variant="text"
+          size="small"
+          icon={<LogOut size={16} color={colors.error} />}
+          style={styles.logoutButton}
+        />
       </View>
-      
+
       <View style={styles.statsContainer}>
         <Card variant="elevated" style={styles.statCard}>
           <Users size={24} color={colors.admin} />
           <Text style={styles.statValue}>{totalChildren.toLocaleString()}</Text>
           <Text style={styles.statLabel}>Total Children</Text>
         </Card>
-        
+
         <Card variant="elevated" style={styles.statCard}>
           <AlertCircle size={24} color={colors.error} />
           <Text style={styles.statValue}>{totalZeroDose.toLocaleString()}</Text>
           <Text style={styles.statLabel}>Zero-Dose</Text>
         </Card>
-        
+
         <Card variant="elevated" style={styles.statCard}>
           <BarChart2 size={24} color={colors.success} />
           <Text style={styles.statValue}>{averageCoverage.toFixed(1)}%</Text>
           <Text style={styles.statLabel}>Avg. Coverage</Text>
         </Card>
       </View>
-      
+
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Zero-Dose Hotspots</Text>
@@ -72,29 +76,25 @@ export default function AdminDashboardScreen() {
             icon={<Map size={16} color={colors.primary} />}
           />
         </View>
-        
+
         {highestZeroDose.map((district) => (
           <Card key={district.id} variant="outlined" style={styles.districtCard}>
             <View style={styles.districtHeader}>
               <Text style={styles.districtName}>{district.name}</Text>
               <Text style={styles.districtRegion}>{district.region}</Text>
             </View>
-            
+
             <View style={styles.districtStats}>
               <View style={styles.districtStat}>
                 <Text style={styles.districtStatLabel}>Zero-Dose:</Text>
-                <Text style={styles.districtStatValue}>
-                  {district.zeroDoseCount}
-                </Text>
+                <Text style={styles.districtStatValue}>{district.zeroDoseCount}</Text>
               </View>
-              
+
               <View style={styles.districtStat}>
                 <Text style={styles.districtStatLabel}>Total Children:</Text>
-                <Text style={styles.districtStatValue}>
-                  {district.totalChildren}
-                </Text>
+                <Text style={styles.districtStatValue}>{district.totalChildren}</Text>
               </View>
-              
+
               <View style={styles.districtStat}>
                 <Text style={styles.districtStatLabel}>Coverage Rate:</Text>
                 <Text
@@ -107,7 +107,7 @@ export default function AdminDashboardScreen() {
                 </Text>
               </View>
             </View>
-            
+
             <View style={styles.progressBarContainer}>
               <View style={styles.progressBarBackground}>
                 <View
@@ -129,7 +129,7 @@ export default function AdminDashboardScreen() {
           </Card>
         ))}
       </View>
-      
+
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Low Coverage Districts</Text>
@@ -140,14 +140,14 @@ export default function AdminDashboardScreen() {
             size="small"
           />
         </View>
-        
+
         {lowestCoverage.map((district) => (
           <Card key={district.id} variant="outlined" style={styles.districtCard}>
             <View style={styles.districtHeader}>
               <Text style={styles.districtName}>{district.name}</Text>
               <Text style={styles.districtRegion}>{district.region}</Text>
             </View>
-            
+
             <View style={styles.districtStats}>
               <View style={styles.districtStat}>
                 <Text style={styles.districtStatLabel}>Coverage Rate:</Text>
@@ -160,22 +160,18 @@ export default function AdminDashboardScreen() {
                   {district.coverageRate.toFixed(1)}%
                 </Text>
               </View>
-              
+
               <View style={styles.districtStat}>
                 <Text style={styles.districtStatLabel}>Zero-Dose:</Text>
-                <Text style={styles.districtStatValue}>
-                  {district.zeroDoseCount}
-                </Text>
+                <Text style={styles.districtStatValue}>{district.zeroDoseCount}</Text>
               </View>
-              
+
               <View style={styles.districtStat}>
                 <Text style={styles.districtStatLabel}>Total Children:</Text>
-                <Text style={styles.districtStatValue}>
-                  {district.totalChildren}
-                </Text>
+                <Text style={styles.districtStatValue}>{district.totalChildren}</Text>
               </View>
             </View>
-            
+
             <View style={styles.progressBarContainer}>
               <View style={styles.progressBarBackground}>
                 <View
@@ -197,7 +193,7 @@ export default function AdminDashboardScreen() {
           </Card>
         ))}
       </View>
-      
+
       <View style={styles.actionsSection}>
         <Text style={styles.sectionTitle}>Quick Actions</Text>
         <View style={styles.actionButtons}>
@@ -209,7 +205,7 @@ export default function AdminDashboardScreen() {
             variant="outline"
             style={styles.actionButton}
           />
-          
+
           <Button
             title="Manage Users"
             onPress={() => {
@@ -234,6 +230,9 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
   },
   header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 24,
   },
   greeting: {
@@ -245,6 +244,9 @@ const styles = StyleSheet.create({
   subGreeting: {
     fontSize: 16,
     color: colors.textLight,
+  },
+  logoutButton: {
+    marginLeft: 8,
   },
   statsContainer: {
     flexDirection: "row",

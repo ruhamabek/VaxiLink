@@ -1,16 +1,16 @@
 {
   "expo": {
-    "name": "Ethiopian Immunisation CareApp",
+    "name": "VaxiLink",
     "slug": "ethiopian-immunisation-careapp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+        "icon": "./assets/images/splash.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/splash-icon.png",
-      "resizeMode": "contain",
+            "image": "./assets/images/splash.png",
+      
       "backgroundColor": "#ffffff"
     },
     "ios": {
@@ -19,7 +19,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/splash.png",
         "backgroundColor": "#ffffff"
       },
       "package": "app.rork.ethiopian-immunisation-careapp"

@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 import { router } from "expo-router";
-import { AlertCircle, Calendar, CheckCircle, Clock, RefreshCw, Users } from "lucide-react-native";
+import { AlertCircle, Calendar, CheckCircle, Clock, LogOut, RefreshCw, Users } from "lucide-react-native";
 import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { mockHEWChildren } from "@/mocks/children";
@@ -19,7 +19,7 @@ import Card from "@/components/Card";
 import colors from "@/constants/colors";
 
 export default function HEWHomeScreen() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { t } = useLanguage();
   const [syncStatus, setSyncStatus] = useState<"synced" | "syncing" | "offline">("synced");
 
@@ -151,58 +151,73 @@ export default function HEWHomeScreen() {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.greeting}>
-            {getGreeting()}, {user?.name.split(" ")[0]}
-          </Text>
-          <Text style={styles.subGreeting}>
-            Health Extension Worker Dashboard
-          </Text>
-        </View>
-        
-        <Pressable
-          onPress={handleSync}
-          style={({ pressed }) => [
-            styles.syncButton,
-            pressed && { opacity: 0.7 },
+    <View style={styles.header}>
+  <View>
+    <Text style={styles.greeting}>
+      {getGreeting()}, {user?.name.split(" ")[0]}
+    </Text>
+    <Text style={styles.subGreeting}>
+      Health Extension Worker Dashboard
+    </Text>
+  </View>
+
+  <View style={styles.headerRight}>
+    <Pressable
+      onPress={handleSync}
+      style={({ pressed }) => [
+        styles.syncButton,
+        pressed && { opacity: 0.7 },
+      ]}
+    >
+      <RefreshCw
+        size={24}
+        color={
+          syncStatus === "synced"
+            ? colors.success
+            : syncStatus === "syncing"
+            ? colors.info
+            : colors.warning
+        }
+      />
+      <View style={styles.syncStatus}>
+        <View
+          style={[
+            styles.syncStatusDot,
+            {
+              backgroundColor:
+                syncStatus === "synced"
+                  ? colors.success
+                  : syncStatus === "syncing"
+                  ? colors.info
+                  : colors.warning,
+            },
           ]}
-        >
-          <RefreshCw
-            size={24}
-            color={
-              syncStatus === "synced"
-                ? colors.success
-                : syncStatus === "syncing"
-                ? colors.info
-                : colors.warning
-            }
-            style={syncStatus === "syncing" ? styles.syncingIcon : undefined}
-          />
-          <View style={styles.syncStatus}>
-            <View
-              style={[
-                styles.syncStatusDot,
-                {
-                  backgroundColor:
-                    syncStatus === "synced"
-                      ? colors.success
-                      : syncStatus === "syncing"
-                      ? colors.info
-                      : colors.warning,
-                },
-              ]}
-            />
-            <Text style={styles.syncStatusText}>
-              {syncStatus === "synced"
-                ? "Synced"
-                : syncStatus === "syncing"
-                ? "Syncing..."
-                : "Offline"}
-            </Text>
-          </View>
-        </Pressable>
+        />
+        <Text style={styles.syncStatusText}>
+          {syncStatus === "synced"
+            ? "Synced"
+            : syncStatus === "syncing"
+            ? "Syncing..."
+            : "Offline"}
+        </Text>
       </View>
+    </Pressable>
+
+    <Pressable
+      onPress={async () => {
+        await logout();
+        router.replace("/(auth)");
+      }}
+      style={({ pressed }) => [
+        styles.logoutButton,
+        pressed && { opacity: 0.7 },
+      ]}
+    >
+      <LogOut size={24} color={colors.error} />
+    </Pressable>
+  </View>
+</View>
+
       
       <View style={styles.statsContainer}>
         <Card variant="elevated" style={styles.statCard}>
@@ -594,4 +609,13 @@ const styles = StyleSheet.create({
     color: colors.text,
     textAlign: "center",
   },
+  headerRight: {
+  flexDirection: "row",
+  alignItems: "center",
+  gap: 16,
+},
+
+logoutButton: {
+  marginLeft: 16,
+},
 });

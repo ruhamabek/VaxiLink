@@ -1,0 +1,25 @@
+{
+  "build": {
+    "production": {
+      "developmentClient": false,
+      "distribution": "store",
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "development": {
+      "bun": "1.2.18",
+      "developmentClient": true,
+      "distribution": "internal"
+    }
+  },
+  "cli": {
+    "version": ">= 3.13.0"
+  }
+}
